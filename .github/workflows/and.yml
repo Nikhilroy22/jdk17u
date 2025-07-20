@@ -34,6 +34,9 @@ jobs:
         echo "NM_TARGET=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm" >> "$GITHUB_ENV"
         echo "STRIP_TARGET=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip" >> "$GITHUB_ENV"
 
+        echo "BUILD_CC=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" >> "$GITHUB_ENV"
+        echo "BUILD_CXX=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" >> "$GITHUB_ENV"
+
     - name: 🛠️ Install dependencies
       run: |
         sudo apt update
@@ -42,7 +45,7 @@ jobs:
           libxt-dev libcups2-dev libasound2-dev ccache \
           libxrandr-dev libxinerama-dev libfontconfig1-dev \
           libfreetype6-dev libpng-dev libgif-dev libjpeg-dev \
-          autoconf clang wget file python3
+          autoconf clang wget
 
     - name: 🩹 Patch config.sub and config.guess
       run: |
@@ -63,11 +66,12 @@ jobs:
         bash configure \
           --openjdk-target="$TARGET_HOST" \
           --with-sysroot="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
+           
           --disable-warnings-as-errors \
           --with-jvm-variants=server \
           --with-boot-jdk=/usr/lib/jvm/temurin-17-jdk-amd64 \
-          CC="$CC_TARGET" \
-          CXX="$CXX_TARGET" \
+          CC="$BUILD_CC" \
+          CXX="$BUILD_CXX" \
           AR="$AR_TARGET" \
           NM="$NM_TARGET" \
           STRIP="$STRIP_TARGET" \
