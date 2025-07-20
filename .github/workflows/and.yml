@@ -63,8 +63,7 @@ jobs:
 
     - name: ⚙️ Configure OpenJDK for Android
       run: |
-        export CFLAGS="--sysroot=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot -I$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include -I$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/$TARGET_HOST"
-        export CXXFLAGS="$CFLAGS"
+        
 
         bash configure \
           --openjdk-target="$TARGET_HOST" \
