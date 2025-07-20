@@ -61,8 +61,8 @@ jobs:
           --with-extra-cflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-ldflags="-pie" \
-          CC="$CC" \
-          CXX="$CXX" \
+          GCC="$CC" \
+          GXX="$CXX" \
           --with-gcc-dir="$GCC_DIR"
 
     - name: 🧱 Build OpenJDK
