@@ -53,6 +53,7 @@ jobs:
     - name: 🔍 Show Java and NDK Info
       run: |
         java -version
+        which clang
         echo "NDK clang path:"
         ls $CLANG_PATH/bin/clang*
 
