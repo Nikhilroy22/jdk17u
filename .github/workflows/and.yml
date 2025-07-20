@@ -56,13 +56,13 @@ jobs:
           --with-debug-level=release \
           --with-jvm-variants=client \
           --enable-headless-only \
-          --with-toolchain-type=clang \
+          --with-toolchain-type=clang-18 \
           --with-tool-dir=$TOOL_DIR \
           --with-extra-cflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-ldflags="-pie" \
-          GCC="$CC" \
-          GXX="$CXX" \
+          CC="$CC" \
+          CXX="$CXX" \
           --with-gcc-dir="$GCC_DIR"
 
     - name: 🧱 Build OpenJDK
