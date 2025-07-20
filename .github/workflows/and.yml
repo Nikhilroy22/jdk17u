@@ -89,7 +89,7 @@ jobs:
           AR="$AR_TARGET" \
           NM="$NM_TARGET" \
           STRIP="$STRIP_TARGET" \
-          --with-debug-level=release
+          
 
     - name: 🧱 Build OpenJDK
       run: |
