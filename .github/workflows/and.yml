@@ -54,7 +54,7 @@ jobs:
         clang --version || true
 
         echo "NDK sysroot:"
-        ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include || true
+        ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr || true
         echo "NDK sysroot bin:"
         ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin || true
 
@@ -72,11 +72,12 @@ jobs:
           --with-sysroot="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           --disable-warnings-as-errors \
           --with-jvm-variants=server \
-          CPPFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           CFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
+          CPPFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
+          LDFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           --with-boot-jdk=/usr/lib/jvm/temurin-17-jdk-amd64 \
           GCC="$CC_TARGET" \
-          GXX="$CXX_TARGET" \
+          GCXX="$CXX_TARGET" \
           AR="$AR_TARGET" \
           NM="$NM_TARGET" \
           STRIP="$STRIP_TARGET" \
