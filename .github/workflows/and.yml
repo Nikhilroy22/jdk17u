@@ -78,7 +78,7 @@ jobs:
           
           
           
-          --with-jvm-variants=server \
+          
           CFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           CPPFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           LDFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
