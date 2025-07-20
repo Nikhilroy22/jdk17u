@@ -17,16 +17,16 @@ jobs:
     - name: 🧰 Install Required Tools
       run: |
         sudo apt update
-        sudo apt install -y build-essential clang zip unzip \
+        sudo apt install -y build-essential gcc g++ clang zip unzip \
            libxext-dev libxrender-dev libxtst-dev \
           libxt-dev libasound2-dev libcups2-dev libfreetype6-dev \
           autoconf make pkg-config
 
     - name: 📥 Download Android NDK r25c
       run: |
-        wget https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
-        unzip android-ndk-r25c-linux.zip
-        mv android-ndk-r25c $HOME/android-ndk
+        wget https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+        unzip android-ndk-r27c-linux.zip
+        mv android-ndk-r27c $HOME/android-ndk
 
     - name: ⚙️ Set up NDK Environment Variables
       run: |
@@ -36,8 +36,9 @@ jobs:
         echo "API_LEVEL=24" >> $GITHUB_ENV
         echo "CLANG_PATH=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64" >> $GITHUB_ENV
         echo "TOOL_DIR=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_ENV
-        echo "CC=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang-14" >> $GITHUB_ENV
+        echo "CC=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" >> $GITHUB_ENV
         echo "CXX=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" >> $GITHUB_ENV
+        echo "GCC_DIR=/usr/bin" >> $GITHUB_ENV
 
     - name: ☕ Set up JDK 16 (Boot JDK)
       uses: actions/setup-java@v3
@@ -61,7 +62,8 @@ jobs:
           --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-ldflags="-pie" \
           CC="$CC" \
-          CXX="$CXX"
+          CXX="$CXX" \
+          --with-gcc-dir="$GCC_DIR"
 
     - name: 🧱 Build OpenJDK
       run: |
