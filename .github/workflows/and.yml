@@ -41,13 +41,21 @@ jobs:
       run: |
         echo "ANDROID_NDK_HOME=$HOME/android-ndk" >> $GITHUB_ENV
         echo "$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
+        echo "$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
         echo "TARGET_HOST=armv7a-linux-androideabi" >> $GITHUB_ENV
         echo "API_LEVEL=24" >> $GITHUB_ENV
         echo "CLANG_PATH=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64" >> $GITHUB_ENV
         echo "TOOLS_DIR=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_ENV
-        # Add explicit compiler paths
+        # Explicit compiler and tool paths
         echo "CC=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" >> $GITHUB_ENV
         echo "CXX=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" >> $GITHUB_ENV
+        echo "AR=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar" >> $GITHUB_ENV
+        echo "STRIP=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip" >> $GITHUB_ENV
+        echo "NM=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm" >> $GITHUB_ENV
+        echo "OBJCOPY=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-objcopy" >> $GITHUB_ENV
+        echo "OBJDUMP=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-objdump" >> $GITHUB_ENV
+        echo "RANLIB=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ranlib" >> $GITHUB_ENV
+        echo "READELF=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-readelf" >> $GITHUB_ENV
 
     - name: ☕ Set up JDK 16 (Boot JDK)
       uses: actions/setup-java@v3
@@ -59,8 +67,10 @@ jobs:
       run: |
         java -version
         $CC --version
-        echo "NDK clang path:"
-        ls $CLANG_PATH/bin/clang*
+        echo "NDK tools:"
+        ls $TOOLS_DIR
+        echo "Environment variables:"
+        env | sort
 
     - name: ⚙️ Configure OpenJDK for Android
       run: |
@@ -78,7 +88,14 @@ jobs:
           --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-ldflags="-pie" \
           CC="$CC" \
-          CXX="$CXX"
+          CXX="$CXX" \
+          AR="$AR" \
+          STRIP="$STRIP" \
+          NM="$NM" \
+          OBJCOPY="$OBJCOPY" \
+          OBJDUMP="$OBJDUMP" \
+          RANLIB="$RANLIB" \
+          READELF="$READELF"
 
     - name: 🧱 Build OpenJDK
       run: |
