@@ -54,7 +54,7 @@ jobs:
         clang --version || true
 
         echo "NDK sysroot:"
-        ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr || true
+        ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include || true
         echo "NDK sysroot bin:"
         ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin || true
 
