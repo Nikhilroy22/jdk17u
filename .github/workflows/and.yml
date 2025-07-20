@@ -57,6 +57,9 @@ jobs:
         echo "System clang:"
         which clang
         clang --version || true
+echo "ls 00000000"
+ls ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot
+echo "jjjjj 11111111"
 
         echo "NDK clang:"
         "$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" --version
