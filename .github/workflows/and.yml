@@ -27,7 +27,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y build-essential clang zip unzip \
-          libX11-dev libxext-dev libxrender-dev libxtst-dev \
+           libxext-dev libxrender-dev libxtst-dev \
           libxt-dev libasound2-dev libcups2-dev libfreetype6-dev \
           autoconf make pkg-config
 
