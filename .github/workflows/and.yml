@@ -75,8 +75,8 @@ jobs:
           --x-includes="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include" \
           --x-libraries="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib" \
           --with-boot-jdk=/usr/lib/jvm/temurin-17-jdk-amd64 \
-          CC="$BUILD_CC" \
-          CXX="$BUILD_CXX" \
+          CC="$CC_TARGET" \
+          CXX="$CXX_TARGET" \
           AR="$AR_TARGET" \
           NM="$NM_TARGET" \
           STRIP="$STRIP_TARGET" \
