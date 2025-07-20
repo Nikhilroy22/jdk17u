@@ -72,8 +72,8 @@ jobs:
           --disable-warnings-as-errors \
           --with-jvm-variants=server \
           --with-boot-jdk=/usr/lib/jvm/temurin-17-jdk-amd64 \
-          CC="$CC_TARGET" \
-          CXX="$CXX_TARGET" \
+          CC="$BUILD_CC" \
+          CXX="$BUILD_CXX" \
           AR="$AR_TARGET" \
           NM="$NM_TARGET" \
           STRIP="$STRIP_TARGET" \
