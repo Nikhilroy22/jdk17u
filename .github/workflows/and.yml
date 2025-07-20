@@ -3,7 +3,7 @@ name: OpenJDK Android Build
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
