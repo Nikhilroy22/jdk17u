@@ -45,6 +45,9 @@ jobs:
         echo "API_LEVEL=24" >> $GITHUB_ENV
         echo "CLANG_PATH=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64" >> $GITHUB_ENV
         echo "TOOLS_DIR=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_ENV
+        # Add explicit compiler paths
+        echo "CC=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" >> $GITHUB_ENV
+        echo "CXX=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" >> $GITHUB_ENV
 
     - name: ☕ Set up JDK 16 (Boot JDK)
       uses: actions/setup-java@v3
@@ -55,7 +58,7 @@ jobs:
     - name: 🔍 Show Java and NDK Info
       run: |
         java -version
-        clang --version
+        $CC --version
         echo "NDK clang path:"
         ls $CLANG_PATH/bin/clang*
 
@@ -73,7 +76,9 @@ jobs:
           --with-tools-dir=$TOOLS_DIR \
           --with-extra-cflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
-          --with-extra-ldflags="-pie"
+          --with-extra-ldflags="-pie" \
+          CC="$CC" \
+          CXX="$CXX"
 
     - name: 🧱 Build OpenJDK
       run: |
