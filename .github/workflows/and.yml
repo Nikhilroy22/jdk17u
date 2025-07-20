@@ -36,7 +36,7 @@ jobs:
         echo "API_LEVEL=24" >> $GITHUB_ENV
         echo "CLANG_PATH=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64" >> $GITHUB_ENV
         echo "TOOL_DIR=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_ENV
-        echo "CC=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" >> $GITHUB_ENV
+        echo "CC=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang-18" >> $GITHUB_ENV
         echo "CXX=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" >> $GITHUB_ENV
         echo "GCC_DIR=/usr/bin" >> $GITHUB_ENV
 
