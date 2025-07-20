@@ -74,13 +74,13 @@ jobs:
       run: |
         bash configure \
           --openjdk-target="$TARGET_HOST" \
-          --with-sysroot="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
+          
           --disable-warnings-as-errors \
           --with-jvm-variants=server \
           CFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           CPPFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           LDFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
-          --with-boot-jdk=/usr/lib/jvm/temurin-17-jdk-amd64 \
+          --with-boot-jdk=$JAVA_HOME \
           GCC="$CC_TARGET" \
           GCXX="$CXX_TARGET" \
           AR="$AR_TARGET" \
