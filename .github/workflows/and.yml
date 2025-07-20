@@ -18,17 +18,18 @@ jobs:
       run: |
         echo "🧠 uname -m output:"
         uname -m
-
         echo "🧠 lscpu architecture:"
         lscpu | grep Architecture
-
         echo "🧠 Bitness:"
         getconf LONG_BIT
 
     - name: 🧰 Install Required Tools
       run: |
         sudo apt update
-        sudo apt install -y build-essential clang zip unzip libX11-dev libxext-dev libxrender-dev libxtst-dev libxt-dev libasound2-dev libcups2-dev libfreetype6-dev autoconf make pkg-config
+        sudo apt install -y build-essential clang zip unzip \
+          libX11-dev libxext-dev libxrender-dev libxtst-dev \
+          libxt-dev libasound2-dev libcups2-dev libfreetype6-dev \
+          autoconf make pkg-config
 
     - name: 📥 Download Android NDK r25c
       run: |
@@ -43,8 +44,9 @@ jobs:
         echo "TARGET_HOST=armv7a-linux-androideabi" >> $GITHUB_ENV
         echo "API_LEVEL=24" >> $GITHUB_ENV
         echo "CLANG_PATH=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64" >> $GITHUB_ENV
+        echo "TOOLS_DIR=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_ENV
 
-    - name: ☕ Set up JDK 16 (for boot JDK)
+    - name: ☕ Set up JDK 16 (Boot JDK)
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
@@ -53,7 +55,7 @@ jobs:
     - name: 🔍 Show Java and NDK Info
       run: |
         java -version
-        which clang
+        clang --version
         echo "NDK clang path:"
         ls $CLANG_PATH/bin/clang*
 
@@ -68,6 +70,7 @@ jobs:
           --with-jvm-variants=client \
           --enable-headless-only \
           --with-toolchain-type=clang \
+          --with-tools-dir=$TOOLS_DIR \
           --with-extra-cflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-ldflags="-pie"
