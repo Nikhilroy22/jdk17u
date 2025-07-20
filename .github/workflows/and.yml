@@ -13,16 +13,17 @@ jobs:
     steps:
     - name: 🧾 Checkout source code
       uses: actions/checkout@v3
+
     - name: 🖥️ Check Ubuntu Architecture and Bitness
-  run: |
-    echo "🧠 uname -m output:"
-    uname -m
+      run: |
+        echo "🧠 uname -m output:"
+        uname -m
 
-    echo "🧠 lscpu architecture:"
-    lscpu | grep Architecture
+        echo "🧠 lscpu architecture:"
+        lscpu | grep Architecture
 
-    echo "🧠 Bitness:"
-    getconf LONG_BIT
+        echo "🧠 Bitness:"
+        getconf LONG_BIT
 
     - name: 📥 Download Android NDK
       run: |
@@ -34,7 +35,6 @@ jobs:
       run: |
         echo "ANDROID_NDK_HOME=$HOME/android-ndk" >> "$GITHUB_ENV"
         echo "$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> "$GITHUB_PATH"
-
         echo "TARGET_HOST=armv7a-linux-androideabi" >> "$GITHUB_ENV"
         echo "API_LEVEL=24" >> "$GITHUB_ENV"
 
@@ -47,8 +47,8 @@ jobs:
     - name: 🔍 Show environment info
       run: |
         java -version
-        echo $ANDROID_NDK_HOME
-        ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin
+        echo "ANDROID_NDK_HOME: $ANDROID_NDK_HOME"
+        ls "$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin"
 
     - name: ⚙️ Configure OpenJDK for Android (ARMv7)
       run: |
