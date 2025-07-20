@@ -63,11 +63,10 @@ jobs:
 
     - name: ⚙️ Configure OpenJDK for Android
       run: |
-        
-
         bash configure \
           --openjdk-target="$TARGET_HOST" \
           --with-sysroot="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
+           
           --disable-warnings-as-errors \
           --with-jvm-variants=server \
           --with-boot-jdk=/usr/lib/jvm/temurin-17-jdk-amd64 \
