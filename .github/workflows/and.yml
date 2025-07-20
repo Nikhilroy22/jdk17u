@@ -59,10 +59,12 @@ jobs:
         clang --version || true
 
         echo "NDK sysroot:"
-        ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot || true
+        ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr || true
+        echo "NDK sysroot bin:"
+        ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin || true
 
         echo "NDK clang:"
-        $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --version
+        $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang --version
 
     - name: ⚙️ Configure OpenJDK for Android
       run: |
@@ -71,6 +73,8 @@ jobs:
           --with-sysroot="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           --disable-warnings-as-errors \
           --with-jvm-variants=server \
+          --x-includes="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include" \
+          --x-libraries="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib" \
           --with-boot-jdk=/usr/lib/jvm/temurin-17-jdk-amd64 \
           CC="$BUILD_CC" \
           CXX="$BUILD_CXX" \
