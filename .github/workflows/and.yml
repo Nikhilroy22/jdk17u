@@ -57,19 +57,18 @@ jobs:
         echo "System clang:"
         which clang
         clang --version || true
-echo "ls 00000000"
-ls ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot
-echo "jjjjj 11111111"
+
+        echo "NDK sysroot:"
+        ls $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot || true
 
         echo "NDK clang:"
-        "$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" --version
+        $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/clang --version
 
     - name: ⚙️ Configure OpenJDK for Android
       run: |
         bash configure \
           --openjdk-target="$TARGET_HOST" \
           --with-sysroot="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
-           
           --disable-warnings-as-errors \
           --with-jvm-variants=server \
           --with-boot-jdk=/usr/lib/jvm/temurin-17-jdk-amd64 \
