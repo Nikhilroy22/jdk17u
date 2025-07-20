@@ -3,7 +3,7 @@ name: OpenJDK Android Build
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
@@ -46,12 +46,7 @@ jobs:
           libxrandr-dev libxinerama-dev libfontconfig1-dev \
           libfreetype6-dev libpng-dev libgif-dev libjpeg-dev \
           autoconf clang wget
-
-    - name: 🩹 Patch config.sub and config.guess
-      run: |
-        wget -O make/autoconf/build-aux/config.sub https://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-        wget -O make/autoconf/build-aux/config.guess https://git.savannah.gnu.org/cgit/config.git/plain/config.guess
-
+    
     - name: 🔍 Show clang version info
       run: |
         echo "System clang:"
@@ -65,6 +60,10 @@ jobs:
 
         echo "NDK clang:"
         $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang --version
+
+    
+
+    
 
     - name: ⚙️ Configure OpenJDK for Android
       run: |
