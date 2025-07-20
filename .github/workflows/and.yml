@@ -84,8 +84,8 @@ jobs:
           CPPFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           LDFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           
-          GCC="$CC_TARGET" \
-          GCXX="$CXX_TARGET" \
+          CC="$CC_TARGET" \
+          CXX="$CXX_TARGET" \
           AR="$AR_TARGET" \
           NM="$NM_TARGET" \
           STRIP="$STRIP_TARGET" \
