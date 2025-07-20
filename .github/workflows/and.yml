@@ -46,9 +46,11 @@ jobs:
           libxrandr-dev libxinerama-dev libfontconfig1-dev \
           libfreetype6-dev libpng-dev libgif-dev libjpeg-dev \
           autoconf clang wget
-    - name: 'Get the BootJDK'
-        id: bootjdk
-        uses: ./.github/actions/get-bootjdk
+    - name: ☕ Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'  # অথবা 'zulu', 'adopt', 'oracle'
+        java-version: '16'
     
     - name: 🔍 Show clang version info
       run: |
@@ -81,7 +83,7 @@ jobs:
           CFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           CPPFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
           LDFLAGS="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
-              --with-boot-jdk=${{ steps.bootjdk.outputs.path }}
+          
           GCC="$CC_TARGET" \
           GCXX="$CXX_TARGET" \
           AR="$AR_TARGET" \
