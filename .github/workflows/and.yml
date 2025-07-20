@@ -50,7 +50,7 @@ jobs:
         bash configure \
           --openjdk-target=arm-linux-androideabi \
           --with-sysroot=$CLANG_PATH/sysroot \
-          --with-boot-jdk=$JAVA_HOME \
+          
           --disable-warnings-as-errors \
           --with-debug-level=release \
           --with-jvm-variants=client \
