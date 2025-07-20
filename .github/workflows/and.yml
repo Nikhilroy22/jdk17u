@@ -25,52 +25,58 @@ jobs:
         echo "🧠 Bitness:"
         getconf LONG_BIT
 
-    - name: 📥 Download Android NDK
+    - name: 🧰 Install Required Tools
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential clang zip unzip libX11-dev libxext-dev libxrender-dev libxtst-dev libxt-dev libasound2-dev libcups2-dev libfreetype6-dev autoconf make pkg-config
+
+    - name: 📥 Download Android NDK r25c
       run: |
         wget https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
         unzip android-ndk-r25c-linux.zip
-        mv android-ndk-r25c "$HOME/android-ndk"
+        mv android-ndk-r25c $HOME/android-ndk
 
-    - name: ⚙️ Set up environment variables
+    - name: ⚙️ Set up NDK Environment Variables
       run: |
-        echo "ANDROID_NDK_HOME=$HOME/android-ndk" >> "$GITHUB_ENV"
-        echo "$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> "$GITHUB_PATH"
-        echo "TARGET_HOST=armv7a-linux-androideabi" >> "$GITHUB_ENV"
-        echo "API_LEVEL=24" >> "$GITHUB_ENV"
+        echo "ANDROID_NDK_HOME=$HOME/android-ndk" >> $GITHUB_ENV
+        echo "$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
+        echo "TARGET_HOST=armv7a-linux-androideabi" >> $GITHUB_ENV
+        echo "API_LEVEL=24" >> $GITHUB_ENV
+        echo "CLANG_PATH=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64" >> $GITHUB_ENV
 
-    - name: ☕ Set up JDK 16 (for bootstrap)
+    - name: ☕ Set up JDK 16 (for boot JDK)
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: '16'
 
-    - name: 🔍 Show environment info
+    - name: 🔍 Show Java and NDK Info
       run: |
         java -version
-        echo "ANDROID_NDK_HOME: $ANDROID_NDK_HOME"
-        ls "$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin"
+        echo "NDK clang path:"
+        ls $CLANG_PATH/bin/clang*
 
-    - name: ⚙️ Configure OpenJDK for Android (ARMv7)
+    - name: ⚙️ Configure OpenJDK for Android
       run: |
         bash configure \
           --openjdk-target=arm-linux-androideabi \
-          --with-sysroot=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot \
+          --with-sysroot=$CLANG_PATH/sysroot \
           --with-boot-jdk=$JAVA_HOME \
           --disable-warnings-as-errors \
           --with-debug-level=release \
           --with-jvm-variants=client \
           --enable-headless-only \
           --with-toolchain-type=clang \
-          --with-extra-cflags="-fPIE" \
-          --with-extra-cxxflags="-fPIE" \
+          --with-extra-cflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
+          --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-ldflags="-pie"
 
     - name: 🧱 Build OpenJDK
       run: |
-        make images
+        make images JOBS=2
 
     - name: 📦 Upload Built JDK Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: openjdk-android
+        name: openjdk-android-armv7
         path: build/*/images/jdk
