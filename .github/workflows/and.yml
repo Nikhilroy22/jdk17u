@@ -1,0 +1,89 @@
+name: OpenJDK Android Build
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-openjdk-android:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: 🧾 Checkout source code
+      uses: actions/checkout@v3
+
+    - name: 📥 Download Android NDK
+      run: |
+        wget https://dl.google.com/android/repository/android-ndk-r25c-linux.zip
+        unzip android-ndk-r25c-linux.zip
+        mv android-ndk-r25c "$HOME/android-ndk"
+
+    - name: ⚙️ Set up environment variables
+      run: |
+        echo "ANDROID_NDK_HOME=$HOME/android-ndk" >> "$GITHUB_ENV"
+        echo "$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> "$GITHUB_PATH"
+
+        echo "TARGET_HOST=aarch64-linux-android" >> "$GITHUB_ENV"
+        echo "API_LEVEL=24" >> "$GITHUB_ENV"
+
+        echo "CC_TARGET=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang" >> "$GITHUB_ENV"
+        echo "CXX_TARGET=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang++" >> "$GITHUB_ENV"
+        echo "AR_TARGET=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar" >> "$GITHUB_ENV"
+        echo "NM_TARGET=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm" >> "$GITHUB_ENV"
+        echo "STRIP_TARGET=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip" >> "$GITHUB_ENV"
+
+        echo "BUILD_CC=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" >> "$GITHUB_ENV"
+        echo "BUILD_CXX=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" >> "$GITHUB_ENV"
+
+    - name: 🛠️ Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential zip unzip \
+          libx11-dev libxext-dev libxrender-dev libxtst-dev \
+          libxt-dev libcups2-dev libasound2-dev ccache \
+          libxrandr-dev libxinerama-dev libfontconfig1-dev \
+          libfreetype6-dev libpng-dev libgif-dev libjpeg-dev \
+          autoconf clang wget
+
+    - name: 🩹 Patch config.sub and config.guess
+      run: |
+        wget -O make/autoconf/build-aux/config.sub https://git.savannah.gnu.org/cgit/config.git/plain/config.sub
+        wget -O make/autoconf/build-aux/config.guess https://git.savannah.gnu.org/cgit/config.git/plain/config.guess
+
+    - name: 🔍 Show clang version info
+      run: |
+        echo "System clang:"
+        which clang
+        clang --version || true
+
+        echo "NDK clang:"
+        "$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" --version
+
+    - name: ⚙️ Configure OpenJDK for Android
+      run: |
+        bash configure \
+          --openjdk-target="$TARGET_HOST" \
+          --with-sysroot="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot" \
+          --with-toolchain-type=clang \
+          --with-tools-dir="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin" \
+          --disable-warnings-as-errors \
+          --with-jvm-variants=server \
+          --with-boot-jdk=/usr/lib/jvm/temurin-17-jdk-amd64 \
+          CC="$BUILD_CC" \
+          CXX="$BUILD_CXX" \
+          AR="$AR_TARGET" \
+          NM="$NM_TARGET" \
+          STRIP="$STRIP_TARGET" \
+          --with-debug-level=release
+
+    - name: 🧱 Build OpenJDK
+      run: |
+        make images
+
+    - name: 📦 Upload Built JDK Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: openjdk-android
+        path: build/*/images/jdk
