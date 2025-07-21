@@ -46,7 +46,7 @@ jobs:
 
     - name: ⚙️ Configure OpenJDK for Android
       run: |
-        bash configure \
+         configure \
           --openjdk-target=arm-linux-androideabi \
           --with-sysroot=$CLANG_PATH/sysroot \
           --disable-warnings-as-errors \
