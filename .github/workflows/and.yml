@@ -35,7 +35,6 @@ jobs:
         echo "TARGET_HOST=armv7a-linux-androideabi" >> $GITHUB_ENV
         echo "API_LEVEL=24" >> $GITHUB_ENV
         echo "CLANG_PATH=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64" >> $GITHUB_ENV
-        echo "TOOL_DIR=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_ENV
         echo "CC=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi24-clang" >> $GITHUB_ENV
         echo "CXX=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi24-clang++" >> $GITHUB_ENV
 
@@ -48,7 +47,6 @@ jobs:
     - name: ⚙️ Configure OpenJDK for Android
       env:
         CLANG_PATH: ${{ env.CLANG_PATH }}
-        TOOL_DIR: ${{ env.TOOL_DIR }}
         API_LEVEL: ${{ env.API_LEVEL }}
         CC: ${{ env.CC }}
         CXX: ${{ env.CXX }}
@@ -61,7 +59,6 @@ jobs:
           --with-jvm-variants=client \
           --enable-headless-only \
           --with-toolchain-type=clang \
-          --with-tool-dir=$TOOL_DIR \
           --with-extra-cflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-ldflags="-pie"
