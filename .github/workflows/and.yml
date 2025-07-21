@@ -17,7 +17,7 @@ jobs:
     - name: 🧰 Install Required Tools
       run: |
         sudo apt update
-        sudo apt install -y build-essential gcc g++ clang zip unzip \
+        sudo apt install -y build-essential zip unzip clang \
           libxext-dev libxrender-dev libxtst-dev \
           libxt-dev libasound2-dev libcups2-dev libfreetype6-dev \
           autoconf make pkg-config
@@ -28,7 +28,7 @@ jobs:
         unzip android-ndk-r27c-linux.zip
         mv android-ndk-r27c $HOME/android-ndk
 
-    - name: ⚙️ Set up NDK Environment Variables
+    - name: ⚙️ Set NDK Environment Variables
       run: |
         echo "ANDROID_NDK_HOME=$HOME/android-ndk" >> $GITHUB_ENV
         echo "$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
@@ -46,8 +46,8 @@ jobs:
 
     - name: ⚙️ Configure OpenJDK for Android
       run: |
-             chmod +x configure
-         configure \
+        chmod +x configure
+        bash configure \
           --openjdk-target=arm-linux-androideabi \
           --with-sysroot=$CLANG_PATH/sysroot \
           --disable-warnings-as-errors \
@@ -70,7 +70,7 @@ jobs:
       run: |
         make images JOBS=2
 
-    - name: 📦 Upload Built JDK Artifacts
+    - name: 📦 Upload Built JDK
       uses: actions/upload-artifact@v4
       with:
         name: openjdk-android-armv7
