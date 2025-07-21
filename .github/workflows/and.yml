@@ -46,7 +46,7 @@ jobs:
 
     - name: ⚙️ Configure OpenJDK for Android
       run: |
-         configure \
+        bash configure \
           --openjdk-target=arm-linux-androideabi \
           --with-sysroot=$CLANG_PATH/sysroot \
           --disable-warnings-as-errors \
@@ -54,6 +54,7 @@ jobs:
           --with-jvm-variants=client \
           --enable-headless-only \
           --with-toolchain-type=clang \
+          --with-tools-dir=$CLANG_PATH/bin \
           --with-extra-cflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-ldflags="-pie"
