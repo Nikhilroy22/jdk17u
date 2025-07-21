@@ -18,9 +18,9 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y build-essential gcc g++ clang zip unzip \
-           libxext-dev libxrender-dev libxtst-dev \
-           libxt-dev libasound2-dev libcups2-dev libfreetype6-dev \
-           autoconf make pkg-config
+          libxext-dev libxrender-dev libxtst-dev \
+          libxt-dev libasound2-dev libcups2-dev libfreetype6-dev \
+          autoconf make pkg-config
 
     - name: 📥 Download Android NDK r27c
       run: |
@@ -45,11 +45,6 @@ jobs:
         java-version: '16'
 
     - name: ⚙️ Configure OpenJDK for Android
-      env:
-        CLANG_PATH: ${{ env.CLANG_PATH }}
-        API_LEVEL: ${{ env.API_LEVEL }}
-        CC: ${{ env.CC }}
-        CXX: ${{ env.CXX }}
       run: |
         bash configure \
           --openjdk-target=arm-linux-androideabi \
@@ -62,6 +57,12 @@ jobs:
           --with-extra-cflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-cxxflags="--target=armv7a-linux-androideabi$API_LEVEL -fPIE" \
           --with-extra-ldflags="-pie"
+      env:
+        CLANG_PATH: ${{ env.CLANG_PATH }}
+        API_LEVEL: ${{ env.API_LEVEL }}
+        CC: ${{ env.CC }}
+        CXX: ${{ env.CXX }}
+        PATH: ${{ env.CLANG_PATH }}/bin:${{ env.PATH }}
 
     - name: 🧱 Build OpenJDK
       run: |
